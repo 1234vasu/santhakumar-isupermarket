@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - Santhakumar iSupermarket</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="https://js.stripe.com/v3/"></script>
+</head>
+<body>
+    <header>
+        <h1>Checkout</h1>
+        <a href="cart.html">Back to Cart</a>
+    </header>
+
+    <form id="checkout-form" style="max-width: 400px; margin: auto;">
+        <input type="text" id="name" placeholder="Your Name" required><br><br>
+        <input type="tel" id="phone" placeholder="Phone Number" required><br><br>
+        <textarea id="address" placeholder="Delivery Address" rows="4" required></textarea><br><br>
+        <button type="submit">Place Order</button>
+    </form>
+
+    <!-- Stripe Payment Button -->
+    <button id="payment-btn">Pay with Stripe</button>
+
+    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+
+        let currentUserEmail = "";
+
+        // Ensure user is logged in
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                currentUserEmail = user.email;
+            } else {
+                alert("Please login to place an order.");
+                window.location.href = "login.html";
+            }
+        });
+
+        // Handle order submit
+        document.getElementById("checkout-form").addEventListener("submit", function(e) {
+            e.preventDefault();
+
+            const name = document.getElementById("name").value;
+            const phone = document.getElementById("phone").value;
+            const address = document.getElementById("address").value;
+            const cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+            if (cart.length === 0) {
+                alert("Your cart is empty!");
+                return;
+            }
+
+            db.collection("orders").add({
+                user: currentUserEmail,
+                name: name,
+                phone: phone,
+                address: address,
+                items: cart,
+                time: new Date()
+            })
+            .then(() => {
+                alert("Order placed successfully!");
+                localStorage.removeItem("cart");
+                window.location.href = "index.html";
+            })
+            .catch((error) => {
+                console.error("Error placing order:", error);
+                alert("Something went wrong. Please try again.");
+            });
+        });
+
+        // Stripe Payment Integration
+        const stripe = Stripe('YOUR_STRIPE_PUBLIC_KEY');
+        const paymentButton = document.getElementById('payment-btn');
+
+        // When the user clicks the "Pay with Stripe" button
+        paymentButton.addEventListener('click', () => {
+            fetch('/create-checkout-session', {  // Replace with your backend API endpoint to create a session
+                method: 'POST',
+            })
+            .then((response) => response.json())
+            .then((sessionId) => {
+                return stripe.redirectToCheckout({ sessionId: sessionId });
+            })
+            .then((result) => {
+                if (result.error) {
+                    alert(result.error.message);
+                }
+            })
+            .catch((error) => {
+                console.error("Error with Stripe checkout:", error);
+                alert("There was an error processing your payment. Please try again.");
+            });
+        });
+    </script>
+</body>
+</html>

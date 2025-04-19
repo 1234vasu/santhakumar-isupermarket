@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Santhakumar iSupermarket</title>
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+    <script>
+      // Your Firebase Config
+      const firebaseConfig = {
+        apiKey: "AIzaSyCzJt24zjNuvchxbwShOQsiQVsYbfPDGBg",
+        authDomain: "santhakumar-isupermarket.firebaseapp.com",
+        projectId: "santhakumar-isupermarket",
+        storageBucket: "santhakumar-isupermarket.appspot.com",
+        messagingSenderId: "887270659941",
+        appId: "1:887270659941:web:05b49c2fd5da08b6a9f38c"
+      };
+
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+    </script>
+
+</head>
+<body>
+    <header>
+        <h1>Welcome to Santhakumar iSupermarket</h1>
+        <p>Fresh vegetables at your doorstep!</p>
+        <a href="shop.html" class="shop-btn">Shop Now</a>
+
+        <!-- User info and logout button -->
+        <div id="user-info" style="text-align: right; padding: 10px;">
+            <span id="user-email" style="margin-right: 10px;"></span>
+            <button id="logout-btn" style="display: none;">Logout</button>
+        </div>
+    </header>
+
+    <!-- Links for Sign Up and Login -->
+    <a href="signup.html">Sign Up</a>
+    <a href="login.html">Login</a>
+
+    <!-- Firebase Authentication and Logout Logic -->
+    <script>
+        const auth = firebase.auth();
+
+        // Monitor authentication state
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                // Display the user email and logout button
+                document.getElementById("user-email").textContent = `Welcome, ${user.email}`;
+                document.getElementById("logout-btn").style.display = "inline-block";
+            } else {
+                // Hide user email and logout button
+                document.getElementById("user-email").textContent = "";
+                document.getElementById("logout-btn").style.display = "none";
+            }
+        });
+
+        // Logout functionality
+        document.getElementById("logout-btn").addEventListener("click", () => {
+            auth.signOut().then(() => {
+                alert("Logged out successfully.");
+                window.location.href = "login.html"; // Redirect to login page
+            });
+        });
+    </script>
+
+    <script src="app.js"></script> <!-- Your custom JavaScript file -->
+</body>
+</html>

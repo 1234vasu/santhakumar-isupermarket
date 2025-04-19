@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Santhakumar iSupermarket</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Login</h1>
+        <a href="index.html">Back to Home</a>
+    </header>
+
+    <!-- Login Form -->
+    <h2>Login to Your Account</h2>
+    <form id="login-form">
+        <input type="email" id="login-email" placeholder="Enter your email" required><br>
+        <input type="password" id="login-password" placeholder="Enter your password" required><br>
+        <button type="submit">Login</button>
+    </form>
+
+    <!-- Firebase Auth Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+
+    <script>
+        const firebaseConfig = {
+          apiKey: "AIzaSyCzJt24zjNuvchxbwShOQsiQVsYbfPDGBg",
+          authDomain: "santhakumar-isupermarket.firebaseapp.com",
+          projectId: "santhakumar-isupermarket",
+          storageBucket: "santhakumar-isupermarket.appspot.com",  // ← corrected `.app` to `.appspot.com`
+          messagingSenderId: "887270659941",
+          appId: "1:887270659941:web:05b49c2fd5da08b6a9f38c"
+        };
+      
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+      
+        // Initialize Firestore
+        const db = firebase.firestore();
+    
+
+        // Login Function
+        document.getElementById("login-form").addEventListener("submit", function(e) {
+            e.preventDefault();
+
+            const email = document.getElementById("login-email").value;
+            const password = document.getElementById("login-password").value;
+
+            auth.signInWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    alert("Login successful!");
+                    window.location.href = "index.html"; // redirect to home after login
+                })
+                .catch((error) => {
+                    alert("Error: " + error.message);
+                });
+        });
+    </script>
+</body>
+</html>

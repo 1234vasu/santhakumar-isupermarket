@@ -1,0 +1,32 @@
+<!-- shop.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Shop - Santhakumar iSupermarket</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Vegetable Shop</h1>
+        <a href="index.html">Back to Home</a>
+    </header>
+
+    <section class="product-container">
+        <div class="product-card">
+            <img src="https://via.placeholder.com/150" alt="Tomato">
+            <h3>Tomato</h3>
+            <p>₹30 per kg</p>
+            <button onclick="addToCart('Tomato', 30)">Add to Cart</button>
+        </div>
+        <div class="product-card">
+            <img src="https://via.placeholder.com/150" alt="Carrot">
+            <h3>Carrot</h3>
+            <p>₹40 per kg</p>
+            <button onclick="addToCart('Carrot', 40)">Add to Cart</button>
+        </div>
+        <!-- Add more products here -->
+    </section>
+
+    <script src="script.js"></script>
+</body>
+</html>

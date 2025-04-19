@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - Santhakumar iSupermarket</title>
+    <link rel="stylesheet" href="style.css"> <!-- Link to CSS for styling -->
+</head>
+<body>
+    <header>
+        <h1>Sign Up</h1>
+        <a href="index.html">Back to Home</a>
+    </header>
+
+    <!-- Sign Up Form -->
+    <h2>Create a New Account</h2>
+    <form id="signup-form">
+        <input type="email" id="signup-email" placeholder="Enter your email" required><br>
+        <input type="password" id="signup-password" placeholder="Enter your password" required><br>
+        <button type="submit">Sign Up</button>
+    </form>
+
+    <!-- Firebase Authentication & JavaScript -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyCzJt24zjNuvchxbwShOQsiQVsYbfPDGBg",
+          authDomain: "santhakumar-isupermarket.firebaseapp.com",
+          projectId: "santhakumar-isupermarket",
+          storageBucket: "santhakumar-isupermarket.appspot.com",  // ← corrected `.app` to `.appspot.com`
+          messagingSenderId: "887270659941",
+          appId: "1:887270659941:web:05b49c2fd5da08b6a9f38c"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+
+        // Get reference to Firebase Auth
+        const auth = firebase.auth();
+
+        // Sign Up Function
+        document.getElementById("signup-form").addEventListener("submit", function(e) {
+            e.preventDefault();
+
+            const email = document.getElementById("signup-email").value;
+            const password = document.getElementById("signup-password").value;
+
+            auth.createUserWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    // Signed up successfully
+                    alert("Signed up successfully!");
+                    window.location.href = "login.html"; // Redirect to login page after successful sign up
+                })
+                .catch((error) => {
+                    const errorMessage = error.message;
+                    alert(`Error: ${errorMessage}`);
+                });
+        });
+    </script>
+</body>
+</html>
